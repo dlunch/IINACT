@@ -75,9 +75,16 @@ public partial class FfxivActPluginWrapper : IDisposable
 
         ffxivActPlugin = new FFXIV_ACT_Plugin.FFXIV_ACT_Plugin();
         ffxivActPlugin.ConfigureIOC();
-        if (dalamudClientLanguage.ToString() == "ChineseSimplified") {
+        if (dalamudClientLanguage.ToString() == "ChineseSimplified")
+        {
             OpcodeManager.Instance.SetRegion(GameRegion.Chinese);
-        } else {
+        }
+        else if (dalamudClientLanguage.ToString() == "Korean")
+        {
+            OpcodeManager.Instance.SetRegion(GameRegion.Korean);
+        }
+        else 
+        { 
             OpcodeManager.Instance.SetRegion(GameRegion.Global);
         }
 
@@ -146,6 +153,7 @@ public partial class FfxivActPluginWrapper : IDisposable
             Dalamud.Game.ClientLanguage.English => Language.English,
             Dalamud.Game.ClientLanguage.German => Language.German,
             Dalamud.Game.ClientLanguage.French => Language.French,
+            Dalamud.Game.ClientLanguage.Korean => Language.Korean,
             _ => dalamudClientLanguage.ToString() == "ChineseSimplified" ? Language.Chinese : Language.English
         };
 
