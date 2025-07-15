@@ -11,14 +11,14 @@ public class FetchDependencies
 
     private Version PluginVersion { get; }
     private string DependenciesDir { get; }
-    private bool IsChinese { get; }
+    private string Language { get; }
     private HttpClient HttpClient { get; }
 
-    public FetchDependencies(Version version, string assemblyDir, bool isChinese, HttpClient httpClient)
+    public FetchDependencies(Version version, string assemblyDir, string language, HttpClient httpClient)
     {
         PluginVersion = version;
         DependenciesDir = assemblyDir;
-        IsChinese = isChinese;
+        Language = language;
         HttpClient = httpClient;
     }
 
@@ -31,8 +31,9 @@ public class FetchDependencies
         if (!NeedsUpdate(pluginPath))
             return;
 
-        if (IsChinese)
+        if (Language == "ChineseSimplified")
             DownloadFile(PluginUrlChinese, pluginPath);
+        else if (Language == "Korean") {}
         else
         {
             if (!File.Exists(pluginZipPath))
@@ -68,10 +69,13 @@ public class FetchDependencies
 
             if (!plugin.ApiVersionMatches())
                 return true;
-            
+
+            if (Language == "Korean") 
+                return !plugin.ApiVersionMatches();
+                        
             using var cancelAfterDelay = new CancellationTokenSource(TimeSpan.FromSeconds(3));
             var remoteVersionString = HttpClient
-                                      .GetStringAsync(IsChinese ? VersionUrlChinese : VersionUrlGlobal,
+                                      .GetStringAsync(Language == "ChineseSimplified" ? VersionUrlChinese : VersionUrlGlobal,
                                                       cancelAfterDelay.Token).Result;
             var remoteVersion = new Version(remoteVersionString);
             return remoteVersion > plugin.Version;

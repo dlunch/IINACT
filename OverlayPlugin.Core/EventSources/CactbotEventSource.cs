@@ -1,4 +1,4 @@
-﻿using Advanced_Combat_Tracker;
+using Advanced_Combat_Tracker;
 using Newtonsoft.Json.Linq;
 using RainbowMage.OverlayPlugin.MemoryProcessors;
 using System;
@@ -221,21 +221,7 @@ public class CactbotEventSource : EventSourceBase
 
         LogInfo("System Locale: {0}", pcLocale ?? "(unknown)");
 
-        switch (language)
-        {
-            case "cn":
-                this.ffxiv = new FFXIVProcessCn(container);
-                LogInfo("Version: cn");
-                break;
-            case "ko":
-                this.ffxiv = new FFXIVProcessKo(container);
-                LogInfo("Version: ko");
-                break;
-            default:
-                this.ffxiv = new FFXIVProcessIntl(container);
-                LogInfo("Version: intl");
-                break;
-        }
+        this.ffxiv = new FFXIVProcessIntl(container);
 
         // Incoming events.
         ActGlobals.oFormActMain.OnLogLineRead += OnLogLineRead;
