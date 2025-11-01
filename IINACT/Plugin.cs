@@ -73,9 +73,9 @@ public sealed class Plugin : IDalamudPlugin
         NotificationManager = notificationManager;
         Log = pluginLog;
 
-        OpcodeManager.Instance.SetRegion(DataManager.Language.ToString() == "ChineseSimplified"
-                                             ? GameRegion.Chinese
-                                             : GameRegion.Global);
+        OpcodeManager.Instance.SetRegion(
+            DataManager.Language.ToString() == "ChineseSimplified" ? GameRegion.Chinese
+            : DataManager.Language.ToString() == "Korean" ? GameRegion.Korean : GameRegion.Global);
 
         var createZoneDownHookManager = Task.Run(() 
             => new ZoneDownHookManager(NotificationManager, GameInteropProvider));
